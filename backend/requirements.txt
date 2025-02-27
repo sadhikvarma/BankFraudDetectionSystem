@@ -1,0 +1,4 @@
+mysql
+pandas
+networkx
+fastapi
