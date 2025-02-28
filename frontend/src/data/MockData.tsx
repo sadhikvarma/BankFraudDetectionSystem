@@ -58,7 +58,13 @@ const generateTransactions = (): Transaction[] => {
     const amount = Math.floor(Math.random() * 9900) + 100;
     
     // 10% chance of being flagged as fraud
-    const isFraud = Math.random() < 0.1;
+    // const isFraud = Math.random() < 0.1;
+
+    const isFraud = fetch("http://localhost:8000/fraud")
+  .then((res) => res.json())
+  .then((data) => data.isFraud)
+  .catch(() => false);
+
     
     transactions.push({
       id: `TXN${String(i).padStart(6, '0')}`,
