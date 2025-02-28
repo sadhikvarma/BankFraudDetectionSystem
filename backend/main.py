@@ -1,31 +1,29 @@
-from fastapi import FastAPI, HTTPException
-print("1")
-from pydantic import BaseModel
-from datetime import datetime
-import pandas as pd
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-print("2")
-from fastapi import FastAPI
-from model.fraud_model import Transaction
-from ml.laundering import predict_fraud
+import uvicorn
 
+# Import the routers
+
+from routes.fraud_router import fraud_router
+
+
+
+
+# Create the FastAPI application
 app = FastAPI()
 
-print("first")
-
+# Enable CORS for all origins, with all methods and headers
+orgin = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=orgin,  # Allow all origins
+    allow_credentials=True,  # Allow credentials
+    allow_methods=["*"],  # Allow all HTTP methods
+    
+    allow_headers=["*"]  # Allow all HTTP headers
 )
-from routes.fraud import fraud_router
-print("Second")
 app.include_router(fraud_router)
 
-
-
-@app.get("/")
-async def root():
-    return {"message": "Fraud Detection API is running"}
+# Run the application on port 8000
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

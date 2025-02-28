@@ -41,46 +41,28 @@ const generateTransactions = (): Transaction[] => {
   const normalUsers = users.filter(user => user.userType === 'normal');
   
   // Generate 50 random transactions
-  for (let i = 1; i <= 50; i++) {
-    const sender = normalUsers[Math.floor(Math.random() * normalUsers.length)];
-    let receiver = normalUsers[Math.floor(Math.random() * normalUsers.length)];
-    
-    // Make sure sender and receiver are different
-    while (sender.id === receiver.id) {
-      receiver = normalUsers[Math.floor(Math.random() * normalUsers.length)];
-    }
-    
-    // Random date within the last 7 days
-    const date = new Date();
-    date.setDate(date.getDate() - Math.floor(Math.random() * 7));
-    
-    // Random amount between 100 and 10000
-    const amount = Math.floor(Math.random() * 9900) + 100;
-    
-    // 10% chance of being flagged as fraud
-    // const isFraud = Math.random() < 0.1;
-
-    const isFraud = fetch("http://localhost:8000/fraud")
-  .then((res) => res.json())
-  .then((data) => data.isFraud)
-  .catch(() => false);
-
-    
-    transactions.push({
-      id: `TXN${String(i).padStart(6, '0')}`,
-      senderBankCode: sender.bankCode!,
-      senderId: sender.accountId!,
-      receiverBankCode: receiver.bankCode!,
-      receiverId: receiver.accountId!,
-      timestamp: format(date, "yyyy-MM-dd'T'HH:mm:ss"),
-      amount,
-      description: `Payment from ${sender.username} to ${receiver.username}`,
-      isFraud,
-      fraudReason: isFraud ? 
-        ['Unusual amount', 'Suspicious pattern', 'Multiple transactions in short time', 'Unknown recipient'][Math.floor(Math.random() * 4)] 
-        : null
-    });
+  for (let i = 0; i < 100; i++) {
+    const isFraud = await fetch("http://localhost:8000/fraud")
+      .then((res) => res.json())
+      .then((data) => data.isFraud)
+      .catch(() => false); // Fallback to false if any error occurs
+    print(isFraud);
+    // transactions.push({
+    //   id: `TXN${String(i).padStart(6, '0')}`,
+    //   senderBankCode: sender.bankCode!,
+    //   senderId: sender.accountId!,
+    //   receiverBankCode: receiver.bankCode!,
+    //   receiverId: receiver.accountId!,
+    //   timestamp: format(date, "yyyy-MM-dd'T'HH:mm:ss"),
+    //   amount,
+    //   description: `Payment from ${sender.username} to ${receiver.username}`,
+    //   isFraud,
+    //   fraudReason: isFraud
+    //     ? ['Unusual amount', 'Suspicious pattern', 'Multiple transactions in short time', 'Unknown recipient'][Math.floor(Math.random() * 4)]
+    //     : null,
+    // });
   }
+  
   
   return transactions;
 };

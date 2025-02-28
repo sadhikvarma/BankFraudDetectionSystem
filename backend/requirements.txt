@@ -1,4 +1,11 @@
-mysql
-pandas
-networkx
 fastapi
+uvicorn
+pydantic
+fireworks
+python-dotenv
+fireworks-ai
+psycopg2
+bcrypt
+requests
+python-jose
+httpx
