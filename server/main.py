@@ -7,8 +7,6 @@ import uvicorn
 from routes.fraud_router import fraud_router
 
 
-
-
 # Create the FastAPI application
 app = FastAPI()
 
